@@ -1,16 +1,17 @@
 {
   "domain": "quandify",
   "name": "Quandify",
-  "version": "1.0.0-beta.1",
-  "documentation": "https://github.com/quandify/ha-quandify",
-  "issue_tracker": "https://github.com/quandify/ha-quandify/issues",
   "codeowners": [
     "@davidlundberg-quandify"
   ],
-  "iot_class": "cloud_polling",
   "config_flow": true,
-  "requirements": [],
+  "dependencies": [],
+  "documentation": "https://github.com/quandify/ha-quandify",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/quandify/ha-quandify/issues",
   "loggers": [
     "quandify"
-  ]
+  ],
+  "requirements": [],
+  "version": "1.0.0-beta.1"
 }
