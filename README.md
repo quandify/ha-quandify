@@ -1,10 +1,9 @@
 # Quandify Integration for Home Assistant
+<img src="./assets/ha-logo.png" alt="Home Assistant Logo" width="50"/>
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
 
-This is a custom integration for Home Assistant to integrate with Quandify smart water devices.
-
-This integration connects to the Quandify API over internet to provide sensor data and control for your devices.
+This is a custom integration for Home Assistant to integrate with Quandify smart water devices. It connects to the Quandify API over internet to provide sensor data and control for your devices.
 
 ## Installation
 
