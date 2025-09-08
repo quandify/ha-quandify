@@ -1,5 +1,6 @@
 # Quandify Integration for Home Assistant
-<img src="./assets/ha-logo.png" alt="Home Assistant Logo" width="50"/>
+
+<img src="https://upload.wikimedia.org/wikipedia/en/4/49/Home_Assistant_logo_%282023%29.svg" alt="Home Assistant Logo" width="50"/>
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
 
