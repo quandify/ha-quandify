@@ -21,7 +21,9 @@ The easiest way to install this integration is with the Home Assistant Community
     - Click **"Add"**.
     - You can now search for "Quandify" in the main HACS integration list and click **"Download"**.
 
-2.  **Restart Home Assistant:** After downloading, you must restart Home Assistant for the integration to be loaded.
+2.  **Restart Home Assistant:** 
+    
+    After downloading, you must restart Home Assistant for the integration to be loaded.
 
 ## Configuration
 
