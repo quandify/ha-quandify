@@ -42,6 +42,6 @@ This integration provides the following entities based on your device type:
 - **Sensor:** Total volume
 - **Sensor:** Water temperature
 - **Sensor:** Water type (Hot/Cold)
-- **Sensor:** Signal strength
+- **Sensor:** WiFi signal strength
 - **Binary Sensor:** Leak
 - **Button:** Acknowledge leak
