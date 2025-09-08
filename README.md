@@ -14,7 +14,6 @@ The easiest way to install this integration is with the Home Assistant Community
 
     - Go to your Home Assistant instance.
     - In the sidebar, click on **HACS**.
-    - Go to **Integrations**.
     - Click the three-dot menu in the top right and select **"Custom repositories"**.
     - In the "Repository" field, paste this URL: `https://github.com/quandify/ha-quandify`
     - In the "Category" dropdown, select **"Integration"**.
