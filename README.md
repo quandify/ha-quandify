@@ -18,12 +18,14 @@ The easiest way to install this integration is with the Home Assistant Community
     - In the "Repository" field, paste this URL: `https://github.com/quandify/ha-quandify`
     - In the "Category" dropdown, select **"Integration"**.
     - Click **"Add"**.
-    - You can now search for "Quandify" in the main HACS integration list and click **"Download"**.
+    - Select Quandify in the main HACS integration list
+    - Choose version from the drop-down list
+    - Click **"Download"**
 
 2.  **Restart Home Assistant:** 
     
     After downloading, you must restart Home Assistant for the integration to be loaded.
-
+ 
 ## Configuration
 
 Once installed, the integration can be configured through the Home Assistant UI.
@@ -32,17 +34,23 @@ Once installed, the integration can be configured through the Home Assistant UI.
 2.  Click the **+ Add Integration** button.
 3.  Search for "Quandify" and select it.
 4.  A dialog box will appear. Enter the email and password for your Quandify account.
+
+    <img src="./assets/img/login_screen.png" alt="Login screen" width="300"/>
+
 5.  Click **Submit**. The integration will automatically discover and add all your registered devices and their entities.
+
+    <img src="./assets/img/device_list.png" alt="Device list" width="300"/>
 
 ## Supported devices
 
 This integration provides the following entities based on your device type:
 
 ### Water Grip
-
 - **Sensor:** Total volume
 - **Sensor:** Water temperature
 - **Sensor:** Water type (Hot/Cold)
 - **Sensor:** WiFi signal strength
 - **Binary Sensor:** Leak
 - **Button:** Acknowledge leak
+
+    <img src="./assets/img/device_card.png" alt="Device card" width="300"/>
