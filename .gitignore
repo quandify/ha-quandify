@@ -1,0 +1,4 @@
+
+venv/
+
+custom_components/quandify/__pycache__/

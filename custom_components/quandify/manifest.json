@@ -1,0 +1,16 @@
+{
+  "domain": "quandify",
+  "name": "Quandify",
+  "version": "1.0.0-alpha.11",
+  "documentation": "https://github.com/davidlundberg90/ha-quandify",
+  "issue_tracker": "https://github.com/davidlundberg90/ha-quandify/issues",
+  "codeowners": [
+    "@davidlundberg90"
+  ],
+  "iot_class": "cloud_polling",
+  "config_flow": true,
+  "requirements": [],
+  "loggers": [
+    "quandify"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Quandify account",
+        "description": "Enter your Quandify account credentials.",
+        "data": {
+          "email": "Email",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to connect to the Quandify service. Please check your credentials and internet connection.",
+      "invalid_auth": "Invalid email or password.",
+      "unknown": "An unexpected error occurred. Please try again."
+    },
+    "abort": {
+      "already_configured": "Account is already configured."
+    }
+  }
+}

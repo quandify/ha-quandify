@@ -1,0 +1,22 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Quandify-konto",
+        "description": "Ange dina inloggningsuppgifter för ditt Quandify-konto.",
+        "data": {
+          "email": "E-post",
+          "password": "Lösenord"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Kunde inte ansluta till Quandify-tjänsten. Kontrollera dina inloggningsuppgifter och internetanslutning.",
+      "invalid_auth": "Ogiltig e-postadress eller lösenord.",
+      "unknown": "Ett oväntat fel inträffade. Vänligen försök igen."
+    },
+    "abort": {
+      "already_configured": "Kontot är redan konfigurerat."
+    }
+  }
+}
