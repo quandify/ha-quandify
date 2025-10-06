@@ -16,16 +16,20 @@ from .models import QuandifyDevice
 
 # Binary Sensor descriptions
 LEAK_SENSOR = BinarySensorEntityDescription(
-    key="leak_status.is_leak",
+    key="status.leakage_status",
     name="Leak",
-    device_class=BinarySensorDeviceClass.MOISTURE)
+    device_class=BinarySensorDeviceClass.MOISTURE,
+)
 
 # Binary Sensor profiles
 DEVICE_BINARY_SENSORS = {
     "Water Grip": [LEAK_SENSOR],
 }
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
+
+async def async_setup_entry(
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+) -> None:
     """Set up the binary sensor entities."""
     coordinator: QuandifyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     entities: list[QuandifyBinarySensor] = []
@@ -33,13 +37,21 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     for device in coordinator.devices:
         if descriptions := DEVICE_BINARY_SENSORS.get(device.model):
             entities.extend(
-                QuandifyBinarySensor(coordinator, device, description) for description in descriptions
+                QuandifyBinarySensor(coordinator, device, description)
+                for description in descriptions
             )
     async_add_entities(entities)
+
+
 class QuandifyBinarySensor(QuandifyEntity, BinarySensorEntity):
     """Implementation of a Quandify binary sensor."""
 
-    def __init__(self, coordinator: QuandifyDataUpdateCoordinator, device: QuandifyDevice, description: BinarySensorEntityDescription):
+    def __init__(
+        self,
+        coordinator: QuandifyDataUpdateCoordinator,
+        device: QuandifyDevice,
+        description: BinarySensorEntityDescription,
+    ):
         """Initialize the binary sensor."""
         super().__init__(coordinator, device)
         self.entity_description = description
@@ -67,4 +79,4 @@ class QuandifyBinarySensor(QuandifyEntity, BinarySensorEntity):
         except AttributeError:
             value = None
 
-        self._attr_is_on = value is True
+        self._attr_is_on = bool(value)
