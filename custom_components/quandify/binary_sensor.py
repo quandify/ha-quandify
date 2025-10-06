@@ -16,7 +16,7 @@ from .models import QuandifyDevice
 
 # Binary Sensor descriptions
 LEAK_SENSOR = BinarySensorEntityDescription(
-    key="status.leakage_status",
+    key="leak_status.leak_state",
     name="Leak",
     device_class=BinarySensorDeviceClass.MOISTURE,
 )
@@ -79,4 +79,4 @@ class QuandifyBinarySensor(QuandifyEntity, BinarySensorEntity):
         except AttributeError:
             value = None
 
-        self._attr_is_on = bool(value)
+        self._attr_is_on = value != "noLeak"
