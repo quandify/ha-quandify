@@ -1,4 +1,5 @@
 """Diagnostics support for Quandify integration."""
+
 from __future__ import annotations
 from typing import Any
 
@@ -7,6 +8,7 @@ from homeassistant.core import HomeAssistant
 
 from .const import CONF_ID_TOKEN, CONF_REFRESH_TOKEN, DOMAIN
 from .coordinator import QuandifyDataUpdateCoordinator
+
 
 async def async_get_config_entry_diagnostics(
     hass: HomeAssistant, entry: ConfigEntry

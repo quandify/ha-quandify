@@ -1,4 +1,5 @@
 """Config flow for Quandify integration."""
+
 import logging
 from typing import Any
 
@@ -14,20 +15,41 @@ from .const import CONF_EMAIL, CONF_PASSWORD, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
+
 class QuandifyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Quandify."""
 
     VERSION = 1
 
-    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def async_step_user(
+        self, user_input: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         """Handle the initial step."""
         errors: dict[str, str] = {}
         if user_input is not None:
             session = async_get_clientsession(self.hass)
-            api = QuandifyAPI(session, {})
+
+            # Small config wrapper providing .get and .set to match QuandifyAPI expectations
+            class _ConfigWrapper:
+                def __init__(self, initial: dict[str, Any] | None = None) -> None:
+                    self._data = dict(initial or {})
+
+                def get(self, key: str, default: Any | None = None) -> Any:
+                    return self._data.get(key, default)
+
+                def set(self, key: str, value: Any) -> None:
+                    self._data.set(key, value)
+
+                def to_dict(self) -> dict[str, Any]:
+                    return dict(self._data)
+
+            config_wrapper = _ConfigWrapper()
+            api = QuandifyAPI(session, config_wrapper)
 
             try:
-                config = await api.login(user_input[CONF_EMAIL], user_input[CONF_PASSWORD])
+                config_obj = await api.login(
+                    user_input.get(CONF_EMAIL), user_input.get(CONF_PASSWORD)
+                )
 
             except ConfigEntryAuthFailed:
                 errors["base"] = "invalid_auth"
@@ -37,14 +59,19 @@ class QuandifyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 _LOGGER.exception("An unexpected error occurred during login: %s", err)
                 errors["base"] = "unknown"
             else:
-                await self.async_set_unique_id(user_input[CONF_EMAIL].lower())
+                email = (user_input.get(CONF_EMAIL) or "").lower()
+                await self.async_set_unique_id(email)
                 self._abort_if_unique_id_configured()
 
-
                 # Configure data stored on disk
+                cfg = (
+                    config_obj.to_dict()
+                    if hasattr(config_obj, "to_dict")
+                    else dict(config_obj)
+                )
                 entry_data = {
-                    CONF_EMAIL: user_input[CONF_EMAIL],
-                    **config
+                    CONF_EMAIL: user_input.get(CONF_EMAIL),
+                    **cfg,
                 }
 
                 return self.async_create_entry(
