@@ -29,21 +29,7 @@ class QuandifyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             session = async_get_clientsession(self.hass)
 
-            # Small config wrapper providing .get and .set to match QuandifyAPI expectations
-            class _ConfigWrapper:
-                def __init__(self, initial: dict[str, Any] | None = None) -> None:
-                    self._data = dict(initial or {})
-
-                def get(self, key: str, default: Any | None = None) -> Any:
-                    return self._data.get(key, default)
-
-                def set(self, key: str, value: Any) -> None:
-                    self._data.set(key, value)
-
-                def to_dict(self) -> dict[str, Any]:
-                    return dict(self._data)
-
-            config_wrapper = _ConfigWrapper()
+            config_wrapper = {}
             api = QuandifyAPI(session, config_wrapper)
 
             try:

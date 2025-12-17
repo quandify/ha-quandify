@@ -24,7 +24,7 @@ class QuandifyAPIError(Exception):
 class QuandifyAPI:
     """A class for interacting with the Quandify API."""
 
-    def __init__(self, session: aiohttp.ClientSession, config: dict[str, Any]):
+    def __init__(self, session: aiohttp.ClientSession, config: dict[str, Any]) -> None:
         """Initialize the API client."""
         self.session = session
         self._config = config
@@ -35,9 +35,9 @@ class QuandifyAPI:
         try:
             if not self._config.get(CONF_ID_TOKEN):
                 auth_data = await self.auth_with_email(email, password)
-                self._config.set(CONF_REFRESH_TOKEN, auth_data.get("refresh_token"))
-                self._config.set(CONF_ID_TOKEN, auth_data.get("id_token"))
-                self._config.set(CONF_ORGANIZATION_ID, auth_data.get("organization_id"))
+                self._config[CONF_REFRESH_TOKEN] = auth_data.get("refresh_token")
+                self._config[CONF_ID_TOKEN] = auth_data.get("id_token")
+                self._config[CONF_ORGANIZATION_ID] = auth_data.get("organization_id")
 
         except (aiohttp.ClientError, ValueError) as err:
             _LOGGER.error("Failed to authenticate to Quandify API: %s", err)
@@ -62,8 +62,8 @@ class QuandifyAPI:
             raise ConfigEntryAuthFailed("Failed to refresh token") from err
 
         else:
-            self._config.set(CONF_ID_TOKEN, data.get("id_token"))
-            self._config.set(CONF_REFRESH_TOKEN, data.get("refresh_token"))
+            self._config[CONF_ID_TOKEN] = data.get("id_token")
+            self._config[CONF_REFRESH_TOKEN] = data.get("refresh_token")
 
         return True
 
