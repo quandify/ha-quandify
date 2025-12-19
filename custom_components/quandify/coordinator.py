@@ -1,4 +1,5 @@
 """DataUpdateCoordinator for the Quandify integration."""
+
 import asyncio
 import logging
 from datetime import timedelta
@@ -13,10 +14,13 @@ from .models import QuandifyDevice
 
 _LOGGER = logging.getLogger(__name__)
 
+
 class QuandifyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Class to manage fetching data from the API."""
 
-    def __init__(self, hass: HomeAssistant, api: QuandifyAPI, devices: list[QuandifyDevice]):
+    def __init__(
+        self, hass: HomeAssistant, api: QuandifyAPI, devices: list[QuandifyDevice]
+    ):
         """Initialize."""
         self.api = api
         self.devices = devices
@@ -38,4 +42,5 @@ class QuandifyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
                 return data
         except Exception as exception:
             raise UpdateFailed(
-                f"Error communicating with API: {exception}") from exception
+                f"Error communicating with API: {exception}"
+            ) from exception

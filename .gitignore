@@ -2,3 +2,5 @@
 venv/
 
 custom_components/quandify/__pycache__/
+
+tests/__pycache__/
