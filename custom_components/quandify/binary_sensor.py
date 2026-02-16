@@ -79,4 +79,7 @@ class QuandifyBinarySensor(QuandifyEntity, BinarySensorEntity):
         except AttributeError:
             value = None
 
-        self._attr_is_on = value != "noLeak"
+        if value is None:
+            self._attr_is_on = None
+        else:
+            self._attr_is_on = value != "noLeak"
