@@ -21,6 +21,7 @@ _LOGGER = logging.getLogger(__name__)
 
 DEVICE_BUTTONS = {
     "Water Grip": ["acknowledge"],
+    "CubicDetector": ["acknowledge"],
     "CubicSecure": ["acknowledge", "open_valve", "close_valve"],
 }
 

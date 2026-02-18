@@ -32,6 +32,8 @@ class QuandifyDevice:
                 model = "CubicSecure"
             else:
                 return None
+        elif device_type == "cubicdetector":
+            model = "CubicDetector"
         else:
             return None
 

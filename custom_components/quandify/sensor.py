@@ -74,6 +74,7 @@ WATER_TYPE = SensorEntityDescription(
 # Sensor profiles
 DEVICE_SENSORS = {
     "Water Grip": [TOTAL_VOLUME, WATER_TEMP, WIFI_SIGNAL, WATER_TYPE],
+    "CubicDetector": [RSSI_SIGNAL],
     "CubicSecure": [
         TOTAL_VOLUME,
         WATER_TEMP,
