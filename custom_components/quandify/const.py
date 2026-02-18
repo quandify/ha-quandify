@@ -19,3 +19,6 @@ CONF_ORGANIZATION_ID: Final = "organization_id"
 
 # Data Update Coordinator
 UPDATE_INTERVAL_MINUTES: Final = 10
+
+# Poll Update delay in seconds when a valve action is performed
+VALVE_UPDATE_DELAY = 30

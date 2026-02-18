@@ -61,6 +61,12 @@ RSSI_SIGNAL = SensorEntityDescription(
     state_class=SensorStateClass.MEASUREMENT,
 )
 
+VALVE_STATE = SensorEntityDescription(
+    key="status.valve_state",
+    name="Valve state",
+    icon="mdi:valve",
+)
+
 WATER_TYPE = SensorEntityDescription(
     key="sub_type", name="Water type", icon="mdi:water-thermometer"
 )
@@ -68,7 +74,13 @@ WATER_TYPE = SensorEntityDescription(
 # Sensor profiles
 DEVICE_SENSORS = {
     "Water Grip": [TOTAL_VOLUME, WATER_TEMP, WIFI_SIGNAL, WATER_TYPE],
-    "CubicSecure": [TOTAL_VOLUME, WATER_TEMP, WIFI_SIGNAL, WATER_TYPE],
+    "CubicSecure": [
+        TOTAL_VOLUME,
+        WATER_TEMP,
+        WIFI_SIGNAL,
+        WATER_TYPE,
+        VALVE_STATE,
+    ],
 }
 
 
@@ -116,8 +128,13 @@ class QuandifySensor(QuandifyEntity, SensorEntity):
             return
 
         if self.entity_description.key == "sub_type":
-            sub_type = value.get("sub_type")
-            self._attr_native_value = sub_type.capitalize() if sub_type else None
+            sub_type_value = value.get("sub_type")
+            self._attr_native_value = (
+                sub_type_value.capitalize() if sub_type_value else None
+            )
+        elif self.entity_description.key == "status.valve_state":
+            valve_state = value.get("status", {}).get("valve_state")
+            self._attr_native_value = valve_state.capitalize() if valve_state else None
         else:
             try:
                 for key_part in self.entity_description.key.split("."):
@@ -127,3 +144,5 @@ class QuandifySensor(QuandifyEntity, SensorEntity):
             except AttributeError:
                 value = None
             self._attr_native_value = value
+
+        self._attr_available = self.coordinator.last_update_success

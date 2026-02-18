@@ -1,14 +1,18 @@
 """Button platform for Quandify integration."""
 
 import logging
+from typing import Any, Coroutine
+
 import aiohttp
 from homeassistant.components.button import ButtonEntity
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, HomeAssistantError
+
+from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
+from .const import DOMAIN, VALVE_UPDATE_DELAY
 from .coordinator import QuandifyDataUpdateCoordinator
 from .entity import QuandifyEntity
 from .models import QuandifyDevice
@@ -89,10 +93,13 @@ class QuandifyOpenValveButton(QuandifyButton):
         _LOGGER.info("Opening valve for device %s", self.device.id)
         try:
             await self.coordinator.api.open_valve(self.device.id)
-            # After a command, request a refresh to get the new state
-            await self.coordinator.async_request_refresh()
+            # Schedule a refresh for later instead of an immediate one.
+            async_call_later(
+                self.hass, VALVE_UPDATE_DELAY, self.async_schedule_update_ha_state
+            )
         except aiohttp.ClientError as err:
             _LOGGER.error("Failed to open valve: %s", err)
+            raise HomeAssistantError("Failed to send open valve command") from err
 
 
 class QuandifyCloseValveButton(QuandifyButton):
@@ -113,7 +120,10 @@ class QuandifyCloseValveButton(QuandifyButton):
         _LOGGER.info("Closing valve for device %s", self.device.id)
         try:
             await self.coordinator.api.close_valve(self.device.id)
-            # After a command, request a refresh to get the new state
-            await self.coordinator.async_request_refresh()
+            # Schedule a refresh for later instead of an immediate one.
+            async_call_later(
+                self.hass, VALVE_UPDATE_DELAY, self.async_schedule_update_ha_state
+            )
         except aiohttp.ClientError as err:
             _LOGGER.error("Failed to close valve: %s", err)
+            raise HomeAssistantError("Failed to send close valve command") from err

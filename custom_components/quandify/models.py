@@ -16,8 +16,8 @@ class QuandifyDevice:
     hardware_version: int | None
 
     @classmethod
-    def from_api(cls, data: dict[str, Any]) -> "QuandifyDevice" | None:
-        """Create a device object from the API response, returning None if unsupported."""
+    def from_api(cls, data: dict[str, Any]) -> "QuandifyDevice":
+        """Create a device object from the API response."""
         device_type = data.get("type")
         hardware_version = data.get("hardware_version")
 
