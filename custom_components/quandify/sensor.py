@@ -26,61 +26,76 @@ TOTAL_VOLUME = SensorEntityDescription(
     name="Total volume",
     native_unit_of_measurement=UnitOfVolume.LITERS,
     state_class=SensorStateClass.TOTAL_INCREASING,
-    device_class=SensorDeviceClass.WATER)
+    device_class=SensorDeviceClass.WATER,
+)
 
 WATER_TEMP = SensorEntityDescription(
     key="status.avg_water_temp",
     name="Water temperature",
     native_unit_of_measurement=UnitOfTemperature.CELSIUS,
     state_class=SensorStateClass.MEASUREMENT,
-    device_class=SensorDeviceClass.TEMPERATURE)
+    device_class=SensorDeviceClass.TEMPERATURE,
+)
 
 AMBIENT_TEMP = SensorEntityDescription(
     key="status.ambient_temp",
     name="Ambient temperature",
     native_unit_of_measurement=UnitOfTemperature.CELSIUS,
     state_class=SensorStateClass.MEASUREMENT,
-    device_class=SensorDeviceClass.TEMPERATURE)
+    device_class=SensorDeviceClass.TEMPERATURE,
+)
 
 WIFI_SIGNAL = SensorEntityDescription(
     key="status.wifi_signal_strength",
     name="Signal strength",
     native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     device_class=SensorDeviceClass.SIGNAL_STRENGTH,
-    state_class=SensorStateClass.MEASUREMENT)
+    state_class=SensorStateClass.MEASUREMENT,
+)
 
 RSSI_SIGNAL = SensorEntityDescription(
     key="status.rssi",
     name="Signal strength",
     native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     device_class=SensorDeviceClass.SIGNAL_STRENGTH,
-    state_class=SensorStateClass.MEASUREMENT)
+    state_class=SensorStateClass.MEASUREMENT,
+)
 
 WATER_TYPE = SensorEntityDescription(
-    key="sub_type",
-    name="Water type",
-    icon="mdi:water-thermometer")
+    key="sub_type", name="Water type", icon="mdi:water-thermometer"
+)
 
 # Sensor profiles
 DEVICE_SENSORS = {
     "Water Grip": [TOTAL_VOLUME, WATER_TEMP, WIFI_SIGNAL, WATER_TYPE],
+    "CubicSecure": [TOTAL_VOLUME, WATER_TEMP, WIFI_SIGNAL, WATER_TYPE],
 }
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
+
+async def async_setup_entry(
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+) -> None:
     """Set up the sensor entities."""
     coordinator: QuandifyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     entities: list[QuandifySensor] = []
     for device in coordinator.devices:
         if descriptions := DEVICE_SENSORS.get(device.model):
             entities.extend(
-                QuandifySensor(coordinator, device, description) for description in descriptions
+                QuandifySensor(coordinator, device, description)
+                for description in descriptions
             )
     async_add_entities(entities)
+
 
 class QuandifySensor(QuandifyEntity, SensorEntity):
     """Implementation of a Quandify sensor."""
 
-    def __init__(self, coordinator: QuandifyDataUpdateCoordinator, device: QuandifyDevice, description: SensorEntityDescription):
+    def __init__(
+        self,
+        coordinator: QuandifyDataUpdateCoordinator,
+        device: QuandifyDevice,
+        description: SensorEntityDescription,
+    ):
         """Initialize the sensor."""
         super().__init__(coordinator, device)
         self.entity_description = description

@@ -24,6 +24,7 @@ LEAK_SENSOR = BinarySensorEntityDescription(
 # Binary Sensor profiles
 DEVICE_BINARY_SENSORS = {
     "Water Grip": [LEAK_SENSOR],
+    "CubicSecure": [LEAK_SENSOR],
 }
 
 

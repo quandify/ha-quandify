@@ -1,4 +1,5 @@
 """The Quandify integration."""
+
 import logging
 
 import aiohttp
@@ -14,7 +15,8 @@ from .models import QuandifyDevice
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS = ["sensor", "binary_sensor", "button"]
+PLATFORMS = ["sensor", "binary_sensor", "button", "switch"]
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Quandify devices from a config entry."""
@@ -30,7 +32,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 devices.append(device)
 
     except (aiohttp.ClientError, ValueError, QuandifyAPIError) as err:
-        _LOGGER.error("Failed to set up Quandify integration during device fetch: %s", err)
+        _LOGGER.error(
+            "Failed to set up Quandify integration during device fetch: %s", err
+        )
         raise ConfigEntryNotReady(f"Failed to get devices: {err}") from err
 
     coordinator = QuandifyDataUpdateCoordinator(hass, api, devices)

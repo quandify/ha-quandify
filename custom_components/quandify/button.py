@@ -1,4 +1,5 @@
 """Button platform for Quandify integration."""
+
 import logging
 import aiohttp
 from homeassistant.components.button import ButtonEntity
@@ -16,9 +17,13 @@ _LOGGER = logging.getLogger(__name__)
 
 DEVICE_BUTTONS = {
     "Water Grip": ["acknowledge"],
+    "CubicSecure": ["acknowledge", "open_valve", "close_valve"],
 }
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
+
+async def async_setup_entry(
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+) -> None:
     """Set up the button entities based on device class."""
     coordinator: QuandifyDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     entities: list[ButtonEntity] = []
@@ -37,16 +42,22 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
 
 class QuandifyButton(QuandifyEntity, ButtonEntity):
     """Base button entity for all Quandify devices."""
+
     _attr_entity_category = EntityCategory.CONFIG
 
     def press(self) -> None:
         pass
+
+
 class QuandifyAcknowledgeLeakButton(QuandifyButton):
     """Represents the acknowledge leak button."""
+
     _attr_name = "Acknowledge leak"
     _attr_icon = "mdi:bell-cancel"
 
-    def __init__(self, coordinator: QuandifyDataUpdateCoordinator, device: QuandifyDevice):
+    def __init__(
+        self, coordinator: QuandifyDataUpdateCoordinator, device: QuandifyDevice
+    ):
         """Initialize the button."""
         super().__init__(coordinator, device)
         self._attr_unique_id = f"{self.device.id}_acknowledge_leak"
@@ -62,10 +73,13 @@ class QuandifyAcknowledgeLeakButton(QuandifyButton):
 
 class QuandifyOpenValveButton(QuandifyButton):
     """Represents the open valve button."""
+
     _attr_name = "Open valve"
     _attr_icon = "mdi:valve-open"
 
-    def __init__(self, coordinator: QuandifyDataUpdateCoordinator, device: QuandifyDevice):
+    def __init__(
+        self, coordinator: QuandifyDataUpdateCoordinator, device: QuandifyDevice
+    ):
         """Initialize the button."""
         super().__init__(coordinator, device)
         self._attr_unique_id = f"{self.device.id}_open_valve"
@@ -83,10 +97,13 @@ class QuandifyOpenValveButton(QuandifyButton):
 
 class QuandifyCloseValveButton(QuandifyButton):
     """Represents the close valve button."""
+
     _attr_name = "Close valve"
     _attr_icon = "mdi:valve-closed"
 
-    def __init__(self, coordinator: QuandifyDataUpdateCoordinator, device: QuandifyDevice):
+    def __init__(
+        self, coordinator: QuandifyDataUpdateCoordinator, device: QuandifyDevice
+    ):
         """Initialize the button."""
         super().__init__(coordinator, device)
         self._attr_unique_id = f"{self.device.id}_close_valve"
