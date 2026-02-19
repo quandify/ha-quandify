@@ -28,7 +28,7 @@ class QuandifyDevice:
         if device_type == "waterfuse":
             if hardware_version == 5 or hardware_version == 7:
                 model = "Water Grip"
-            elif hardware_version == 4:
+            elif hardware_version == 4 or hardware_version == 6:
                 model = "CubicSecure"
             else:
                 return None
