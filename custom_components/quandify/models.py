@@ -22,7 +22,7 @@ class QuandifyDevice:
         node = data.get("node", {})
         name = node.get("name", "Unknown Device")
 
-        if device_type == "waterfuse" and hardware_version == 5:
+        if device_type == "waterfuse" and hardware_version in (5, 7):
             model = "Water Grip"
         else:
             return None
