@@ -19,3 +19,7 @@ CONF_ORGANIZATION_ID: Final = "organization_id"
 
 # Data Update Coordinator
 UPDATE_INTERVAL_MINUTES: Final = 10
+
+# Extended consumption data settings
+EXTENDED_CONSUMPTION_LOOKBACK_HOURS: Final = 24
+EXTENDED_CONSUMPTION_BUCKET_DELAY_MINUTES: Final = 5

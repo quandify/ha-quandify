@@ -6,12 +6,13 @@ from typing import Any
 import aiohttp
 from homeassistant.exceptions import ConfigEntryAuthFailed
 
-from .const import API_BASE_URL, AUTH_BASE_URL
 from .const import (
+    API_BASE_URL,
+    AUTH_BASE_URL,
     CONF_ACCOUNT_ID,
     CONF_ID_TOKEN,
-    CONF_REFRESH_TOKEN,
     CONF_ORGANIZATION_ID,
+    CONF_REFRESH_TOKEN,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -69,11 +70,15 @@ class QuandifyAPI:
 
     async def _request(
         self, method: str, url: str, retry: bool = True, **kwargs: Any
-    ) -> dict[str, Any]:
-        """Make an authenticated request to the Quandify API, refreshing the token if needed."""
+    ) -> Any:
+        """Make an authenticated request to the Quandify API.
+
+        Different Quandify endpoints return different payload shapes. Keep this
+        helper generic and let the public API methods validate the response shape
+        they expect.
+        """
 
         headers = {"Authorization": f"Bearer {self._config.get(CONF_ID_TOKEN)}"}
-        response = {}
 
         try:
             response = await self.session.request(
@@ -121,13 +126,68 @@ class QuandifyAPI:
         organization_id = self._config.get(CONF_ORGANIZATION_ID)
         url = f"{API_BASE_URL}/organization/{organization_id}/devices/"
         response = await self._request("get", url)
-        return response.get("data", [])
+        return response.get("data", []) if isinstance(response, dict) else []
 
     async def get_device_info(self, device_id: str) -> dict[str, Any]:
         """Get all info for a single device."""
         organization_id = self._config.get(CONF_ORGANIZATION_ID)
         url = f"{API_BASE_URL}/organization/{organization_id}/devices/{device_id}"
-        return await self._request("get", url)
+        response = await self._request("get", url)
+        return response if isinstance(response, dict) else {}
+
+    async def get_device_detailed_consumption(
+        self,
+        device_id: str,
+        *,
+        from_ts: int,
+        to_ts: int,
+        truncate: str = "hour",
+        timezone: str = "UTC",
+    ) -> dict[str, Any]:
+        """Get detailed timestamped consumption for a single device.
+
+        The detailed response includes both timestamped consumption data and
+        aggregate totals for the requested period. This is the preferred source
+        for hourly water usage graphs.
+        Callers should pass the Home Assistant configured time zone when possible.
+        """
+        organization_id = self._config.get(CONF_ORGANIZATION_ID)
+        url = (
+            f"{API_BASE_URL}/organization/{organization_id}/devices/"
+            f"{device_id}/detailed-consumption"
+        )
+        params = {
+            "from": from_ts,
+            "to": to_ts,
+            "truncate": truncate,
+            "timezone": timezone,
+        }
+        response = await self._request("get", url, params=params)
+        return response if isinstance(response, dict) else {}
+
+    async def get_device_leak_status(self, device_id: str) -> dict[str, Any]:
+        """Get detailed leak status for a single device.
+
+        This exposes the API leak state, mean flow and timestamps in addition
+        to the basic leak binary sensor.
+        """
+        organization_id = self._config.get(CONF_ORGANIZATION_ID)
+        url = (
+            f"{API_BASE_URL}/organization/{organization_id}/devices/"
+            f"{device_id}/leak-status"
+        )
+        response = await self._request("get", url)
+        return response if isinstance(response, dict) else {}
+
+    async def get_device_firmware_version(self, device_id: str) -> dict[str, Any]:
+        """Get current and latest firmware version for a single device."""
+        organization_id = self._config.get(CONF_ORGANIZATION_ID)
+        url = (
+            f"{API_BASE_URL}/organization/{organization_id}/devices/"
+            f"{device_id}/firmware-version"
+        )
+        response = await self._request("get", url)
+        return response if isinstance(response, dict) else {}
 
     async def acknowledge_leak(self, device_id: str) -> None:
         """Acknowledge a leak."""
