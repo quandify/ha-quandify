@@ -8,6 +8,13 @@
           "email": "E-post",
           "password": "Lösenord"
         }
+      },
+      "reauth_confirm": {
+        "title": "Logga in på Quandify igen",
+        "description": "Inloggningen för {email} har gått ut. Ange ditt lösenord för att logga in igen.",
+        "data": {
+          "password": "Lösenord"
+        }
       }
     },
     "error": {
@@ -16,7 +23,8 @@
       "unknown": "Ett oväntat fel inträffade. Vänligen försök igen."
     },
     "abort": {
-      "already_configured": "Kontot är redan konfigurerat."
+      "already_configured": "Kontot är redan konfigurerat.",
+      "reauth_successful": "Inloggningen lyckades."
     }
   }
 }
