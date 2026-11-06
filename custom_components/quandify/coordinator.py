@@ -6,6 +6,7 @@ from datetime import timedelta
 from typing import Any
 
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import QuandifyAPI
@@ -40,6 +41,9 @@ class QuandifyDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
                     device_info = await self.api.get_device_info(device.id)
                     data[device.id] = device_info
                 return data
+        except ConfigEntryAuthFailed:
+            # Let Home Assistant start the reauthentication flow.
+            raise
         except Exception as exception:
             raise UpdateFailed(
                 f"Error communicating with API: {exception}"

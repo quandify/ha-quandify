@@ -1,9 +1,10 @@
 """The Quandify integration."""
 import logging
+from typing import Any
 
 import aiohttp
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -19,7 +20,13 @@ PLATFORMS = ["sensor", "binary_sensor", "button"]
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Quandify devices from a config entry."""
     session = async_get_clientsession(hass)
-    api = QuandifyAPI(session, dict(entry.data))
+
+    @callback
+    def _persist_tokens(tokens: dict[str, Any]) -> None:
+        """Save refreshed tokens so they survive a Home Assistant restart."""
+        hass.config_entries.async_update_entry(entry, data={**entry.data, **tokens})
+
+    api = QuandifyAPI(session, dict(entry.data), on_tokens_updated=_persist_tokens)
 
     try:
         raw_devices = await api.get_devices()
